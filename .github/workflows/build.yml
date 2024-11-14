@@ -20,4 +20,4 @@ jobs:
         run: make
 
       - name: Run tests (if any)
-        run: ./my_program
+        run: ./main
