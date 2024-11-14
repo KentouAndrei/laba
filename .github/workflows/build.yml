@@ -1,0 +1,23 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - branchMake
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up GCC
+        run: sudo apt-get install g++
+
+      - name: Build the project
+        run: make
+
+      - name: Run tests (if any)
+        run: ./my_program
