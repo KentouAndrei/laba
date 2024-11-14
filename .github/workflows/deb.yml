@@ -1,0 +1,41 @@
+name: Build debian
+
+on:
+  push:
+    branches: ["branchAutoPackage"]
+  pull_request:
+    branches: ["branchAutoPackage"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Chekout code
+        uses: actions/checkout@v3
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential autoconf automake make g++ dpkg-dev
+
+      - name: Generate config scripts
+        run: |
+          aclocal
+          autoconf
+          automake --add-missing
+
+      - name: Build and configure
+        run: |
+          ./configure
+          make
+
+      - name: Build deb package
+        run: dpkg-deb --build deb
+
+      - name: Upload deb package
+        uses: actions/upload-artifact@v3
+        with:
+          name: program-deb-package
+          path: deb.deb
