@@ -1,0 +1,12 @@
+Source: myprogram
+Section: utils
+Priority: optional
+Maintainer: Your Name www.vandrey@gmail.com
+Build-Depends: debhelper (>= 12), autotools-dev, pkg-config
+Standards-Version: 4.5.0
+
+Package: myprogram
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Myprogram
+ This is a simple C++ program demonstrating how to create a Debian package.

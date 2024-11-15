@@ -1,0 +1,10 @@
+Package: myprogram
+Version: 1.0-1
+Architecture: amd64
+Maintainer: Your Name www.vandrey@gmail.com
+Installed-Size: 23
+Depends: libc6 (>= 2.34), libstdc++6 (>= 4.4)
+Section: utils
+Priority: optional
+Description: Myprogram
+ This is a simple C++ program demonstrating how to create a Debian package.
