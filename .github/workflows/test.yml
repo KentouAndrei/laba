@@ -1,0 +1,27 @@
+name: Tests
+
+on: 
+  push:
+    branches: ["branchAutoTest"]
+  pull_request: 
+    branches: ["branchAutoTest"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libgtest-dev automake autoconf
+
+      - name: Build
+        run: |
+          autoreconf -i
+          make
+
+      - name: Tests
+        run: make check
