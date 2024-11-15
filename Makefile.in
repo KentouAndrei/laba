@@ -772,11 +772,14 @@ uninstall-am: uninstall-binPROGRAMS
 .PHONY: deb debug
 
 deb:
-    echo "Package: $(PACKAGE)" > deb/DEBIAN/control
-    echo "Version: $(VERSION)" >> deb/DEBIAN/control
-    echo "Architecture: all" >> deb/DEBIAN/control
-    echo "Maintainer: $(PACKAGE_BUGREPORT)" >> deb/DEBIAN/control
-    echo "Description: MyProgram does amazing things" >> deb/DEBIAN/control
+	mkdir -p deb/DEBIAN
+	echo "Package: myprogram" > deb/DEBIAN/control
+	echo "Version: 1.0" >> deb/DEBIAN/control
+	echo "Section: utils" >> deb/DEBIAN/control
+	echo "Priority: optional" >> deb/DEBIAN/control
+	echo "Architecture: amd64" >> deb/DEBIAN/control
+	echo "Maintainer: Your Name <your.email@example.com>" >> deb/DEBIAN/control
+	echo "Description: A short description of the package" >> deb/DEBIAN/control
 
 debug:
 	@echo "${PACKAGE}"
