@@ -1,1 +1,3 @@
-# dummy
+FuncA.o: FuncA.cpp /usr/include/stdc-predef.h FuncA.h
+/usr/include/stdc-predef.h:
+FuncA.h:

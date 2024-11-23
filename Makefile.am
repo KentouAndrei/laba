@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 bin_PROGRAMS = myprogram
-myprogram_SOURCES = main.cpp FuncA.cpp FuncA.h
+myprogram_SOURCES = main.cpp FuncA.cpp FuncA.h HTTP_Server.cpp
 check_PROGRAMS = test
 test_SOURCES = test.cpp FuncA.cpp
 PACKAGE = myprogram
