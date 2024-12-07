@@ -1,0 +1,39 @@
+name: Multistage build
+
+on: 
+  push:
+    branches: ["*"]
+  pull_request: 
+    branches: ["*"]
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Install Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: build ls
+        run: docker buildx ls
+
+      - name: Log in to dockerhub
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      
+      - name: Build Dockerfile image for amd64
+        run: docker build --platform=linux/amd64 -t andrey509/worker:amd64 --push .
+
+      - name: Build Dockerfile image for arm64
+        run: docker build --platform=linux/arm64 -t andrey509/worker:arm64 --push .
+      
+      - name: Create manifest
+        run: docker manifest create andrey509/worker --amend andrey509/worker:amd64 --amend andrey509/worker:arm64
+
+      - name: Push manifest to docker hub
+        run: docker manifest push andrey509/worker
