@@ -9,6 +9,7 @@ RUN aclocal
 RUN autoconf
 RUN ./configure
 RUN cmake
+RUN make clean
 RUN make
 
 FROM alpine
