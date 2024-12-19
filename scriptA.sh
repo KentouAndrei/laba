@@ -39,35 +39,35 @@ while true; do
         launch_container srv1 0
     fi
 
-    # Launch srv2 after 2 minutes if srv1 is running
+    # Launch srv2 after 1 minute if srv1 is running
     if docker ps --filter "name=srv1" | grep -q "srv1"; then
-        echo "srv1 is running, ensuring srv2 is started after 2 minutes"
+        echo "srv1 is running, ensuring srv2 is started after 1 minute"
         if ! docker ps --filter "name=srv2" | grep -q "srv2"; then
-            sleep 120
+            sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
             echo "Launching srv2"
             launch_container srv2 1
         fi
     fi
 
-    # Launch srv3 after 2 minutes if srv2 is running
+    # Launch srv3 after 1 minute if srv2 is running
     if docker ps --filter "name=srv2" | grep -q "srv2"; then
-        echo "srv2 is running, ensuring srv3 is started after 2 minutes"
+        echo "srv2 is running, ensuring srv3 is started after 1 minute"
         if ! docker ps --filter "name=srv3" | grep -q "srv3"; then
-            sleep 120
+            sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
             echo "Launching srv3"
             launch_container srv3 2
         fi
     fi
 
-    # Check and terminate srv2 if idle for 2 minutes
+    # Check and terminate srv2 if idle for 1 minute
     if docker ps --filter "name=srv2" | grep -q "srv2"; then
         echo "Checking if srv2 is idle"
         if [ "$(check_container_busy srv2)" == "idle" ]; then
-            echo "srv2 is idle, waiting for 2 minutes before terminating"
-            sleep 120
-            # Re-check after 2 minutes
+            echo "srv2 is idle, waiting for 1 minute before terminating"
+            sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+            # Re-check after 1 minute
             if [ "$(check_container_busy srv2)" == "idle" ]; then
-                echo "srv2 is still idle after 2 minutes, terminating"
+                echo "srv2 is still idle after 1 minute, terminating"
                 terminate_container srv2
             else
                 echo "srv2 is no longer idle, skipping termination"
@@ -77,16 +77,16 @@ while true; do
         echo "srv2 is not running, skipping idle check"
     fi
 
-    # Check and terminate srv3 if idle for 2 minutes (only after srv2 is terminated)
+    # Check and terminate srv3 if idle for 1 minute (only after srv2 is terminated)
     if ! docker ps --filter "name=srv2" | grep -q "srv2"; then
         if docker ps --filter "name=srv3" | grep -q "srv3"; then
             echo "Checking if srv3 is idle"
             if [ "$(check_container_busy srv3)" == "idle" ]; then
-                echo "srv3 is idle, waiting for 2 minutes before terminating"
-                sleep 120
-                # Re-check after 2 minutes
+                echo "srv3 is idle, waiting for 1 minute before terminating"
+                sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+                # Re-check after 1 minute
                 if [ "$(check_container_busy srv3)" == "idle" ]; then
-                    echo "srv3 is still idle after 2 minutes, terminating"
+                    echo "srv3 is still idle after 1 minute, terminating"
                     terminate_container srv3
                 else
                     echo "srv3 is no longer idle, skipping termination"
@@ -97,5 +97,22 @@ while true; do
         fi
     fi
 
-    sleep 120  # Wait before the next iteration
+    # Check for new version of image and update containers
+    echo "Pulling latest image..."
+    output=$(docker pull andrey509/worker:latest)
+    echo "$output"  # Output the result for debugging
+
+    # Check if a new image was downloaded
+    if echo "$output" | grep -q "Downloaded newer image"; then
+        echo "New image found, updating containers..."
+        for container in srv1 srv2 srv3; do
+            if docker ps --filter "name=$container" | grep -q "$container"; then
+                update_container $container
+            fi
+        done
+    else
+        echo "No new image found, skipping update."
+    fi
+
+    sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
 done
