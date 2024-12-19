@@ -43,7 +43,7 @@ while true; do
     if docker ps --filter "name=srv1" | grep -q "srv1"; then
         echo "srv1 is running, ensuring srv2 is started after 1 minute"
         if ! docker ps --filter "name=srv2" | grep -q "srv2"; then
-            sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+            sleep 60  
             echo "Launching srv2"
             launch_container srv2 1
         fi
@@ -53,7 +53,7 @@ while true; do
     if docker ps --filter "name=srv2" | grep -q "srv2"; then
         echo "srv2 is running, ensuring srv3 is started after 1 minute"
         if ! docker ps --filter "name=srv3" | grep -q "srv3"; then
-            sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+            sleep 60  
             echo "Launching srv3"
             launch_container srv3 2
         fi
@@ -64,7 +64,7 @@ while true; do
         echo "Checking if srv2 is idle"
         if [ "$(check_container_busy srv2)" == "idle" ]; then
             echo "srv2 is idle, waiting for 1 minute before terminating"
-            sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+            sleep 60  
             # Re-check after 1 minute
             if [ "$(check_container_busy srv2)" == "idle" ]; then
                 echo "srv2 is still idle after 1 minute, terminating"
@@ -83,7 +83,7 @@ while true; do
             echo "Checking if srv3 is idle"
             if [ "$(check_container_busy srv3)" == "idle" ]; then
                 echo "srv3 is idle, waiting for 1 minute before terminating"
-                sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+                sleep 60  
                 # Re-check after 1 minute
                 if [ "$(check_container_busy srv3)" == "idle" ]; then
                     echo "srv3 is still idle after 1 minute, terminating"
@@ -114,5 +114,5 @@ while true; do
         echo "No new image found, skipping update."
     fi
 
-    sleep 60  # Changed from 120 seconds to 60 seconds (1 minute)
+    sleep 60  
 done
